@@ -1,4 +1,4 @@
-<h1>Plot.ly Homework - Belly Button Biodiversity</h1>
+<h1>Belly Button Biodiversity</h1>
 
 <p>This project consists of an interactive dashboard to explore the Belly Button Biodiversity dataset, which catalogs the microbes that colonize human navels.</p>
 
