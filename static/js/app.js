@@ -1,30 +1,30 @@
-// Test data import
+// retrieve data
 const jsonData = d3.json("data/samples.json");
 jsonData.then(data => {
   console.log("Full Dataset:", data)
 });
 
-// Create reference variables
+
 const dropdownElement = d3.select("#selDataset")
 const metadataElement = d3.select("#sample-metadata");
 
 function init() {
   jsonData.then(data => {data.names
 
-    // Fill dropdown element
+    // dropdown menu
     .forEach(id => dropdownElement
       .append("option")
       .text(id)
       .property("value")
     )
 
-    // Default plot
+    // default
     buildDashboard(data.names[0])
     console.log("Default ID:", data.names[0])   
   });
 };
 
-// Event handler for new selection
+// new selection
 function optionChanged(selectionId) {
   console.log(`Subject ID: ${selectionId}`);
   buildDashboard(selectionId);
@@ -33,14 +33,10 @@ function optionChanged(selectionId) {
 // Build dashboard with plots and metadata
 function buildDashboard(selectionId) {
   jsonData.then(data => {
-
-    // Create reference variable for selected ID samples data
     var selectionSamples = data.samples.filter(sample => sample.id === selectionId)[0];
     console.log(`ID ${selectionSamples.id} selectionSamples:`, selectionSamples);
     
-    // #################################
-    // BAR CHART
-    // #################################
+  //bar chart
     var barTrace = {
       x: selectionSamples.sample_values.slice(0, 10).reverse(),
       y: selectionSamples.otu_ids.slice(0, 10).map(otuId => `OTU ${otuId}`).reverse(),
@@ -58,12 +54,9 @@ function buildDashboard(selectionId) {
       }
     };
 
-    // Plot bar chart
     Plotly.newPlot("bar", barData, barLayout);
 
-    // #################################
-    // BUBBLE CHART
-    // #################################
+    // bubble chart
     var bubbleTrace = {
       x: selectionSamples.otu_ids,
       y: selectionSamples.sample_values,
@@ -90,18 +83,13 @@ function buildDashboard(selectionId) {
       },
     };
     
-    // Plot bubble chart
     Plotly.newPlot("bubble", bubbleData, bubbleLayout);
     
-    // #################################
-    // METADATA
-    // #################################
-         
-    // Filter for selected ID
+    // Filter selected ID
     var selectionMetadata = data.metadata.filter(meta => meta.id.toString() === selectionId)[0];
     console.log(`ID ${selectionMetadata.id} selectionMetadata:`, selectionMetadata);
 
-    // Clear existing html data
+    // Clear selected data back to default
     metadataElement.html("");
 
     // Add selection metadata to Demographic Info on page
@@ -111,9 +99,7 @@ function buildDashboard(selectionId) {
       .text(`${key.toUpperCase()}: ${value}`)
     });
     
-    // #################################
-    // GAUGE CHART
-    // #################################
+   //gauge chart
     var selectionWfreq = selectionMetadata.wfreq;
     console.log("selectionWfreq:", selectionWfreq);
 
